@@ -1,0 +1,11 @@
+[Unit]
+Description=Pulseaudio
+
+[Service]
+User=root
+Type=forking
+ExecStart=/bin/pulseaudio --daemonize --realtime
+Restart=always
+
+[Install]
+WantedBy=default.target

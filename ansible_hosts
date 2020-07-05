@@ -1,0 +1,2 @@
+[vmhosts]
+vmhost ansible_connection=local
