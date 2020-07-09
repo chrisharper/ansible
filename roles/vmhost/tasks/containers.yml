@@ -1,0 +1,8 @@
+- name: copy podman folders
+  copy:
+    src: files/podman/
+    dest: /tmp/podman/
+  notify: new_container_images
+
+
+

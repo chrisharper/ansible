@@ -1,0 +1,11 @@
+- name: install git for clone
+  dnf: 
+    name: git
+    state: present
+
+- name: clone new libvirt-usb repo
+  git:
+    repo: https://github.com/chrisharper/libvirt-usb
+    dest: /tmp/libvirt-usb
+  notify: cloned_libvirt_usb
+

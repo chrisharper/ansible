@@ -1,0 +1,51 @@
+- name: stop all containers
+  command: podman stop -a 
+  listen: new_container_images
+
+- name: prune stopped containers
+  command: podman container prune
+  listen: new_container_images
+
+- name: podman build hostapd image
+  command: podman build -t homenetwork/hostapd -f /tmp/podman/hostapd/Dockerfile 
+  listen: new_container_images
+
+- name: run homenetwork/hostapd container
+  command: podman run --cap-add=NET_ADMIN --network=host -d --name=homenetwork-hostapd  localhost/homenetwork/hostapd
+  listen: new_container_images
+
+- name: podman build dnsmasq image
+  command: podman build -t homenetwork/dnsmasq -f /tmp/podman/dnsmasq/Dockerfile 
+  listen: new_container_images
+
+- name: run homenetwork/dnsmasq container
+  command: podman run --cap-add=NET_ADMIN --network=host -d --name=homenetwork-dnsmasq  localhost/homenetwork/dnsmasq
+  listen: new_container_images
+
+- name: generate systemd file for homenetwork/hostapd
+  shell: "podman generate systemd --name homenetwork-hostapd > /etc/systemd/system/container-homenetwork-hostapd.service"
+  listen: new_container_images
+
+- name: generate systemd file for homenetwork/dnsmasq
+  shell: "podman generate systemd --name homenetwork-dnsmasq > /etc/systemd/system/container-homenetwork-dnsmasq.service"
+  listen: new_container_images
+
+- name: reload systemd to pickup new service files
+  command: systemctl daemon-reload
+  listen: new_container_images
+
+- name: container-homenetwork-hostapd enabled 
+  systemd:
+    name: container-homenetwork-hostapd
+    enabled: yes
+    state: started
+  listen: new_container_images
+
+- name: container-homenetwork-dnsmasq enabled 
+  systemd:
+    name: container-homenetwork-dnsmasq
+    enabled: yes
+    state: started
+  listen: new_container_images
+
+

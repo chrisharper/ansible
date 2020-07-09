@@ -1,0 +1,3 @@
+- hosts: vmhosts
+  roles:
+    - vmhost

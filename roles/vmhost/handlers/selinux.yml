@@ -1,0 +1,28 @@
+- name: create policy module
+  command: checkmodule -M -m -o /tmp/vmhost.mod /tmp/vmhost.te
+  listen: selinux_updated
+
+- name: compile policy module 
+  command: semodule_package -o /tmp/vmhost.pp -m /tmp/vmhost.mod
+  listen: selinux_updated
+
+- name: load policy module
+  command: semodule -X 300 -i /tmp/vmhost.pp
+  listen: selinux_updated
+
+
+
+# leave vmhost.te inplace so we only run these handlers on new file content
+
+- name: remove vmhost.mod 
+  file:
+    path: /tmp/vmhost.mod
+    state: absent
+  listen: selinux_updated
+
+- name: remove vmhost.pp
+  file:
+    path: /tmp/vmhost.pp
+    state: absent
+  listen: selinux_updated
+

@@ -1,0 +1,22 @@
+- name: move enp0s31f6 to external zone
+  command: firewall-cmd --zone=external --permanent --add-interface=enp0s31f6
+
+- name: openssh disabled on external zone
+  command: firewall-cmd --zone=external --permanent --remove-service=ssh
+
+- name: move br0 to internal  zone
+  command: firewall-cmd --zone=internal --permanent --add-interface=br0
+
+- name: dhcp enabled on internal zone
+  command: firewall-cmd --zone=internal --permanent --add-service=dhcp
+
+- name: dns enabled on internal zone
+  command: firewall-cmd --zone=internal --permanent --add-service=dns
+
+- name: dns rejected to others on udp from internal
+  command: firewall-cmd --zone=internal --permanent --direct --add-rule ipv4 filter FORWARD 0 -s 10.10.10.0/24 -p udp -m udp --dport=53 -j REJECT
+
+- name: dns rejected to others on tcp from internal
+  command: firewall-cmd --zone=internal --permanent --direct --add-rule ipv4 filter FORWARD 0 -s 10.10.10.0/24 -p tcp -m tcp --dport=53 -j REJECT
+
+

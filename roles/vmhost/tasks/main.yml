@@ -1,0 +1,112 @@
+# Selinux first otherwise other the old policy may interfere with services booting
+- include_tasks:
+    file: selinux.yml
+    apply:
+      tags: selinux
+  tags: selinux
+
+- include_tasks: 
+    file: containers.yml
+    apply:
+      tags: containers
+  tags: containers
+
+- include_tasks: 
+    file: libvirt.yml
+    apply:
+      tags: libvirt
+  tags: libvirt
+
+- include_tasks: 
+    file: libvirt-usb.yml
+    apply:
+      tags: libvirt-usb
+  tags: libvirt-usb
+
+- include_tasks:
+    file: pulseaudio.yml
+    apply:
+      tags: pulseaudio
+  tags: pulseaudio
+
+- include_tasks: 
+    file: ssh.yml
+    apply:
+      tags: ssh
+
+- include_tasks: 
+    file: firewall.yml
+    apply:
+      tags: firewall
+  tags: firewall
+
+- name: rpcbind.service is disabled
+  systemd:
+    name: rpcbind.service
+    state: stopped
+    enabled: no
+
+- name: rpcbind.socket is disabled
+  systemd:
+    name: rpcbind.socket
+    state: stopped
+    enabled: no
+    
+- name: cockpit.socket is enabled 
+  systemd:
+    name: cockpit.socket
+    state: started
+    enabled: yes
+
+- name: kdump is disabled
+  systemd:
+    name: kdump
+    state: stopped
+    enabled: no
+
+- name: ctrl+alt+delete disabled
+  systemd:
+    name: ctrl-alt-del.target
+    masked: yes
+
+- name: systemd-resolved LLMR disabled
+  lineinfile:
+    path: /etc/systemd/resolved.conf
+    state: present
+    regex: ^#LLMNR=yes
+    line: LLMNR=no
+
+- name: vmhost in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regex: ^10.10.10.1
+    line: 10.10.10.1 vmhost vmhost.homenetwork
+
+- name: add user charper
+  user:
+    name: charper
+    group: wheel
+
+- name: setup authorized_key for charper
+  authorized_key:
+    user: charper
+    state: present
+    key: https://github.com/chrisharper.keys
+
+- name: /etc/default/grub enables iommu and disables ipv6
+  lineinfile:
+    path: /etc/default/grub
+    state: present
+    regex: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt vfio-pci.ids=10de:13c2,10de:0fbb rd.driver.blacklist=nouveau"
+  notify: rebuild grub
+
+- name: vfio is loaded
+  blockinfile:
+    create: yes
+    path: /etc/modules-load.d/vfio.conf
+    block: |
+      vfio
+      vfio_pci
+      vfio_iommu_type1
+      vfio_virqfd

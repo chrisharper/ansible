@@ -1,0 +1,21 @@
+
+- name: qemu in input groups
+  user:
+    name: qemu
+    append: yes
+    groups: input
+  listen: qemu_installed
+
+- name: default virt-net autostarts
+  virt_net:
+    name: default
+    autostart: yes
+  listen: virt_net_updated 
+
+- name: default virt-net started 
+  virt_net:
+    name: default
+    state: active
+  listen: virt_net_updated 
+ 
+

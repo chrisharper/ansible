@@ -1,0 +1,41 @@
+
+module vmhost 1.0;
+
+require {
+	type pulseaudio_var_lib_t;
+	type pulseaudio_t;
+	type etc_t;
+	type svirt_t;
+	type pulseaudio_var_run_t;
+	type event_device_t;
+	type user_tmp_t;
+	type lvm_control_t;
+	class capability { dac_override dac_read_search };
+	class file { create write execute map };
+	class dir { add_name create rmdir setattr write };
+	class chr_file { ioctl open read write };
+	class sock_file write;
+	class unix_stream_socket connectto;
+}
+
+#============= pulseaudio_t ==============
+
+#!!!! This avc can be allowed using the boolean 'domain_can_mmap_files'
+allow pulseaudio_t pulseaudio_var_lib_t:file map;
+
+allow pulseaudio_t etc_t:dir { rmdir setattr };
+allow pulseaudio_t etc_t:dir { add_name create write };
+allow pulseaudio_t etc_t:file { create write };
+
+#!!!! This avc can be allowed using the boolean 'domain_can_mmap_files'
+allow pulseaudio_t pulseaudio_var_run_t:file map;
+allow pulseaudio_t pulseaudio_var_run_t:file execute;
+allow pulseaudio_t self:capability { dac_override dac_read_search };
+
+#============= svirt_t ==============
+allow svirt_t event_device_t:chr_file { ioctl open read write };
+allow svirt_t lvm_control_t:chr_file { read write };
+allow svirt_t pulseaudio_t:unix_stream_socket connectto;
+
+#!!!! This avc can be allowed using the boolean 'virt_use_xserver'
+allow svirt_t user_tmp_t:sock_file write;

@@ -1,0 +1,55 @@
+- name: qemu in pulse-access group
+  user:
+    name: qemu
+    append: yes
+    groups: pulse-access
+  listen: pulseaudio_installed
+ 
+- name: pulse in audio group
+  user:
+    name: pulse
+    append: yes
+    groups: audio
+  listen: pulseaudio_installed
+
+- name: symlink /etc/pulse/system.pa -> /etc/pulse/default.pa
+  file:
+    src: /etc/pulse/default.pa
+    dest: /etc/pulse/system.pa
+    state: link
+    force: yes
+  listen: pulseaudio_installed
+
+- name: pulseaudio systemd unit in place
+  copy:
+    src: files/pulseaudio.service
+    dest: /etc/systemd/system/pulseaudio.service
+  listen: pulseaudio_installed
+
+- name: reload systemd to pickup new service file
+  command: systemctl daemon-reload
+
+- name: global pulseaudio.service disabled
+  systemd:
+    name: pulseaudio.service
+    state: stopped
+    scope: global
+    enabled: no 
+  listen: pulseaudio_installed
+
+- name: global pulseaudio.socket disabled
+  systemd:
+    name: pulseaudio.socket
+    state: stopped
+    scope: global
+    enabled: no 
+  listen: pulseaudio_installed
+
+ 
+- name: pulseaudio enabled 
+  systemd:
+    name: pulseaudio
+    enabled: yes
+    state: started
+  listen: pulseaudio_installed
+

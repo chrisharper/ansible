@@ -1,0 +1,68 @@
+# openstack contains newer libvirt+qemu versions
+- name: install openstack repo
+  dnf:
+    name: centos-release-openstack-ussuri 
+    state: latest
+
+- name: libvirt  installed
+  dnf:
+    name: 
+      - libvirt
+
+- name: qemu-kvm installed
+  dnf:
+    name: 
+      - qemu-kvm
+  notify: qemu_installed
+ 
+- name: install qemu-kvm-pa module
+  dnf:
+    name: 'https://github.com/chrisharper/centos-qemu-kvm-audio-pa/raw/master/qemu-kvm-audio-pa-4.2.0-19.el8.x86_64.rpm'
+    state: present
+
+- name: libvirt helpers installed
+  dnf:
+    name: 
+      - virt-install
+      - python3-libvirt
+      - python3-lxml
+    state: latest
+
+- name: /etc/libvirt/qemu.conf allows evdev passthrough
+  blockinfile:
+    path: /etc/libvirt/qemu.conf
+    block: |
+      cgroup_device_acl = [
+        "/dev/input/event3", "/dev/input/event4",
+        "/dev/input/event5" , "/dev/input/event6",
+        "/dev/input/event7" , "/dev/input/event8",
+        "/dev/null", "/dev/full", "/dev/zero",
+        "/dev/random", "/dev/urandom",
+        "/dev/ptmx", "/dev/kvm",
+        "/dev/rtc","/dev/hpet"]
+     
+ 
+#libvirt needs to run for virt-net changes to work
+- name: libvirtd is started
+  systemd:
+    name: libvirtd
+    state: started
+    enabled: yes
+
+
+- name: default virt-net is undefined
+  virt_net:
+    name: default
+    state: absent 
+
+- name: default virt-net is defined as bridge
+  virt_net:
+    name: default
+    command: define
+    xml: "<network><name>default</name><forward mode='bridge' /><bridge name='br0' /></network>"
+    autostart: yes
+  notify: virt_net_updated
+ 
+
+
+

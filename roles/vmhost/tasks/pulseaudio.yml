@@ -1,0 +1,22 @@
+- name: pulseaudio installed
+  dnf:
+    name: pulseaudio
+    state: latest
+  notify: pulseaudio_installed
+
+- name: /etc/pulse/default.pa sets up /tmp/pulse-socket
+  lineinfile:
+    path: /etc/pulse/default.pa
+    state: present
+    regex: "^load-module module-native-protocol-unix"
+    line: load-module module-native-protocol-unix auth-group-enable=true auth-group=pulse-access socket=/tmp/pulse-socket
+
+- name: /etc/pulse/client.conf has default server
+  lineinfile:
+    path: /etc/pulse/client.conf
+    state: present
+    regex: "^; default-server ="
+    line: default-server = unix:/tmp/pulse-socket
+
+
+

@@ -1,0 +1,24 @@
+- name: enable ssh authkey authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regex: '^#PubkeyAuthentication yes'
+    line: 'PubkeyAuthentication yes'
+
+- name: disable ssh password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regex: '^PasswordAuthentication yes'
+    line: 'PasswordAuthentication no'
+
+- name: disable ssh root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regex: '^PermitRootLogin yes'
+    line: 'PermitRootLogin no'
+
+- name: reload ssh
+  systemd:
+    name: sshd
+    state: restarted
+
+

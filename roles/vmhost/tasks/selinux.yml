@@ -1,0 +1,7 @@
+- name: copy selinux .te file
+  copy:
+    src: files/vmhost.te
+    dest: /tmp/vmhost.te
+  notify: selinux_updated
+
+

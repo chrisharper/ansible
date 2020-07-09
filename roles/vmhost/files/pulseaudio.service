@@ -4,7 +4,7 @@ Description=Pulseaudio
 [Service]
 User=root
 Type=forking
-ExecStart=/bin/pulseaudio --daemonize --realtime
+ExecStart=/bin/pulseaudio --system --daemonize --realtime --disallow-exit --disallow-module-loading
 Restart=always
 
 [Install]
