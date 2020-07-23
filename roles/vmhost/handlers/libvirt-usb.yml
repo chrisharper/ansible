@@ -6,6 +6,11 @@
   command: cp /tmp/libvirt-usb/libvirt-usb.sh /etc/libvirt/libvirt-usb.sh
   listen: cloned_libvirt_usb
 
+- name: copy libvirt-usb shell script
+  command: cp /tmp/libvirt-usb/libvirt-usb.config /etc/libvirt/libvirt-usb.config
+  listen: cloned_libvirt_usb
+
+
 - name: chmod libvirt-usb shell script
   file:
     path: /etc/libvirt/libvirt-usb.sh

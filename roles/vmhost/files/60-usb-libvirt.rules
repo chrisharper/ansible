@@ -1,1 +1,0 @@
-ACTION=="bind|unbind", ENV{DEVTYPE}=="usb_device", SUBSYSTEM=="usb", RUN+="/etc/libvirt/libvirt-usb.sh"
