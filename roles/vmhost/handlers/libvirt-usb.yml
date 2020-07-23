@@ -1,17 +1,17 @@
-- name: copy libvirt-usb udev rules
+- name: copy 60-usb-libvirt.rules
   command: cp /tmp/libvirt-usb/60-usb-libvirt.rules /etc/udev/rules.d/60-usb-libvirt.rules
   listen: cloned_libvirt_usb
 
-- name: copy libvirt-usb shell script
+- name: copy libvirt-usb.sh 
   command: cp /tmp/libvirt-usb/libvirt-usb.sh /etc/libvirt/libvirt-usb.sh
   listen: cloned_libvirt_usb
 
-- name: copy libvirt-usb shell script
+- name: copy libvirt-usb.config 
   command: cp /tmp/libvirt-usb/libvirt-usb.config /etc/libvirt/libvirt-usb.config
   listen: cloned_libvirt_usb
 
 
-- name: chmod libvirt-usb shell script
+- name: chmod +x libvirt-usb.sh 
   file:
     path: /etc/libvirt/libvirt-usb.sh
     mode: o+x
