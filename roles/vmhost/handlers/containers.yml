@@ -30,6 +30,24 @@
   shell: "podman generate systemd --name homenetwork-dnsmasq > /etc/systemd/system/container-homenetwork-dnsmasq.service"
   listen: new_container_images
 
+- name: launch container-homenetwork-hostapd after network is up
+  blockinfile:
+    path: /etc/systemd/system/container-homenetwork-hostapd.service
+    insertafter: '^Documentation'
+    block: |
+      After=network-online.target
+      Wants=network-online.target
+  listen: new_container_images
+
+- name: launch container-homenetwork-dnsmasq after network is up
+  blockinfile:
+    path: /etc/systemd/system/container-homenetwork-dnsmasq.service
+    insertafter: '^Documentation'
+    block: |
+      After=network-online.target
+      Wants=network-online.target
+  listen: new_container_images
+
 - name: reload systemd to pickup new service files
   command: systemctl daemon-reload
   listen: new_container_images
