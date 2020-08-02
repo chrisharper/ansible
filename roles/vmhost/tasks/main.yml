@@ -93,6 +93,14 @@
     state: present
     key: https://github.com/chrisharper.keys
 
+- name: passwd -l root
+  command: passwd -l root
+
+- name: set root shell to /sbin/nologin
+  user:
+    name: root
+    shell: /sbin/nologin
+
 - name: /etc/default/grub enables iommu and disables ipv6
   lineinfile:
     path: /etc/default/grub
