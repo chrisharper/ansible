@@ -59,7 +59,7 @@
   virt_net:
     name: default
     command: define
-    xml: "<network><name>default</name><forward mode='bridge' /><bridge name='br0' /></network>"
+    xml: "<network><name>default</name><forward mode='bridge' /><bridge name='{{internal_interface}}' /></network>"
     autostart: yes
   notify: virt_net_updated
  

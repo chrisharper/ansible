@@ -10,3 +10,10 @@
     dest: /tmp/podman/dnsmasq.conf
   notify: new_container_images
 
+- name: copy hostpad template
+  template:
+    src: hostapd.conf.j2
+    dest: /tmp/podman/hostapd.conf
+  notify: new_container_images
+
+

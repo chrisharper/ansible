@@ -1,6 +1,10 @@
 vmhosts:
   hosts:
     vmhost:
+      external_interface: enp0s31f6
+      internal_interface: br0
+      wireless_interface: wlp4s0
       internal_address: 10.10.10.1
+      internal_net: 10.10.10.0/24
       dhcp_start: 10.10.10.100
       dhcp_end: 10.10.10.200
