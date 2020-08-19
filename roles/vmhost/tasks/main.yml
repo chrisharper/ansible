@@ -59,6 +59,15 @@
     state: started
     enabled: yes
 
+- name: cockpit setup to listen on internal address
+  blockinfile:
+    create: yes
+    path: /etc/systemd/system/cockpit.socket.d/listen.conf
+    block: |
+      [Socket]
+      ListenStream=
+      ListenStream=10.10.10.1:9090
+
 - name: kdump is disabled
   systemd:
     name: kdump
