@@ -2,3 +2,5 @@ vmhosts:
   hosts:
     vmhost:
       internal_address: 10.10.10.1
+      dhcp_start: 10.10.10.100
+      dhcp_end: 10.10.10.200

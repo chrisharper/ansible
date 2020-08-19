@@ -4,5 +4,9 @@
     dest: /tmp/podman/
   notify: new_container_images
 
-
+- name: copy dnsmasq template
+  template:
+    src: dnsmasq.conf.j2
+    dest: /tmp/podman/dnsmasq.conf
+  notify: new_container_images
 

@@ -7,7 +7,7 @@
   listen: new_container_images
 
 - name: podman build hostapd image
-  command: podman build -t homenetwork/hostapd -f /tmp/podman/hostapd/Dockerfile 
+  command: podman build -t homenetwork/hostapd -f /tmp/podman/Dockerfile.hostapd
   listen: new_container_images
 
 - name: run homenetwork/hostapd container
@@ -15,7 +15,7 @@
   listen: new_container_images
 
 - name: podman build dnsmasq image
-  command: podman build -t homenetwork/dnsmasq -f /tmp/podman/dnsmasq/Dockerfile 
+  command: podman build -t homenetwork/dnsmasq -f /tmp/podman/Dockerfile.dnsmasq 
   listen: new_container_images
 
 - name: run homenetwork/dnsmasq container

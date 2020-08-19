@@ -108,7 +108,7 @@ group=dnsmasq
 #except-interface=
 # Or which to listen on by address (remember to include 127.0.0.1 if
 # you use this.)
-listen-address=127.0.0.1,10.10.10.1
+listen-address=127.0.0.1,{{internal_address}}
 # If you want dnsmasq to provide only DNS service on an interface,
 # configure it as shown above, and then use the following line to
 # disable DHCP and TFTP on it.
@@ -154,7 +154,7 @@ domain=homenetwork
 # a lease time. If you have more than one network, you will need to
 # repeat this for each network on which you want to supply DHCP
 # service.
-dhcp-range=10.10.10.1,10.10.10.200,12h
+dhcp-range={{dhcp_start}},{{dhcp_end}},12h
 
 # This is an example of a DHCP range where the netmask is given. This
 # is needed for networks we reach the dnsmasq DHCP server via a relay
