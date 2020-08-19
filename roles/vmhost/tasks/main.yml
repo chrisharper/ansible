@@ -33,6 +33,7 @@
     file: ssh.yml
     apply:
       tags: ssh
+  tags: ssh
 
 - include_tasks: 
     file: firewall.yml

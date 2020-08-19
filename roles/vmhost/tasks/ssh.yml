@@ -16,6 +16,18 @@
     regex: '^PermitRootLogin yes'
     line: 'PermitRootLogin no'
 
+- name: ipv4 only
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regex: '^#AddressFamily any'
+    line: 'AddressFamily inet'
+
+- name: listen on internal address only
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regex: '^#ListenAddress 0.0.0.0'
+    line: 'ListenAddress 10.10.10.1'
+
 - name: reload ssh
   systemd:
     name: sshd
