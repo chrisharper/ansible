@@ -1,2 +1,4 @@
 ---
-- import_playbook: vmhosts.yml
+- hosts: vmhosts
+  roles:
+    - vmhost

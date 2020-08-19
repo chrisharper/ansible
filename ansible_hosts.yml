@@ -1,0 +1,4 @@
+vmhosts:
+  hosts:
+    vmhost:
+      internal_address: 10.10.10.1

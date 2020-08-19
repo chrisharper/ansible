@@ -66,7 +66,7 @@
     block: |
       [Socket]
       ListenStream=
-      ListenStream=10.10.10.1:9090
+      ListenStream={{internal_address}}:9090
 
 - name: kdump is disabled
   systemd:
@@ -90,7 +90,7 @@
   lineinfile:
     path: /etc/hosts
     regex: ^10.10.10.1
-    line: 10.10.10.1 vmhost vmhost.homenetwork
+    line: "{{ internal_address }} vmhost vmhost.homenetwork"
 
 - name: add user charper
   user:
